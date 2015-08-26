@@ -39,9 +39,15 @@ class PublisherCommand(sublime_plugin.EventListener):
 		if(not dirty):
 			sublime.message_dialog('No files to publish');
 			return False;
+
 		self.generateFileList(dirty);
+
 		self.folder = window.extract_variables()['folder'];
 		self.window = window;
+
+		if(len(dirty) == 1 and window.active_view() and window.active_view().file_name() in dirty):
+			self.uploadAll();
+			return True;
 		
 		lst = self.renderFileList();
 		window.show_quick_panel(lst, self.filesSelected);
