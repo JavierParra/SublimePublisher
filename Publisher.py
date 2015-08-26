@@ -53,7 +53,7 @@ class PublisherCommand(sublime_plugin.EventListener):
 			self.lst.append({'path': i, 'selected': True});
 
 	def renderFileList(self):
-		printableList = [['     Upload all listed files', ''], ['     Upload selected files', ''], ['     Clear selected files', '']];
+		printableList = [['     Upload selected files', ''], ['     Clear selected files', '']];
 		for i in self.lst:
 			if(i['selected']):
 				checkmark = '[x]';
@@ -67,20 +67,21 @@ class PublisherCommand(sublime_plugin.EventListener):
 
 	def filesSelected(self, index):
 		print (index);
-		if(index >= 3):
-			lstItem = self.lst[index-3];
+		if(index >= 2):
+			lstItem = self.lst[index-2];
 			lstItem['selected'] = not lstItem['selected'];
 			lst = self.renderFileList();
 			self.window.show_quick_panel(lst, self.filesSelected);
 			return;
 		
-		if(index == 0):
-			return self.uploadAll();
+		# Eliminamos la opción de Upload All listed files porque es redundante y confusa.
+		# if(index == 0):
+		# 	return self.uploadAll();
 
-		if(index == 1):
+		if(index == 0):
 			return self.uploadSelected();
 		
-		if(index == 2):
+		if(index == 1):
 			return self.clearSelected();
 
 	def uploadAll(self):
